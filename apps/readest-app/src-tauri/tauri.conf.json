@@ -1,8 +1,8 @@
 {
   "$schema": "../node_modules/@tauri-apps/cli/config.schema.json",
-  "productName": "Readest",
+  "productName": "Mengread",
   "mainBinaryName": "readest",
-  "identifier": "com.bilingify.readest",
+  "identifier": "com.meng.mengread",
   "version": "../package.json",
   "build": {
     "frontendDist": "../out",
@@ -222,7 +222,7 @@
           "appLink": true
         },
         {
-          "scheme": ["readest"],
+          "scheme": ["mengread"],
           "appLink": false
         },
         {
@@ -236,7 +236,7 @@
       ],
       "desktop": {
         "schemes": [
-          "readest",
+          "mengread",
           "readest-onedrive",
           "com.googleusercontent.apps.209390247301-ctpmep68ppfa56r1b8tr35e4qi4p60kq"
         ]

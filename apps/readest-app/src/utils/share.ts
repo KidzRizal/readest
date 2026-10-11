@@ -1,5 +1,10 @@
 import { writeTextToClipboard } from '@/utils/clipboard';
-import { READEST_WEB_BASE_URL, SHARE_BASE_URL, SHARE_TOKEN_LENGTH } from '@/services/constants';
+import {
+  isAppUrlProtocol,
+  READEST_WEB_BASE_URL,
+  SHARE_BASE_URL,
+  SHARE_TOKEN_LENGTH,
+} from '@/services/constants';
 
 export interface ShareDeepLink {
   token: string;
@@ -28,7 +33,7 @@ export const parseShareDeepLink = (url: string): ShareDeepLink | null => {
   } catch {
     return null;
   }
-  if (parsed.protocol === 'readest:') {
+  if (isAppUrlProtocol(parsed.protocol)) {
     // For readest://share/{token} the host portion holds the path segment
     // before the slash. Use pathname for the token; url.host == 'share'.
     if (parsed.host !== 'share') return null;

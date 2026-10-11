@@ -942,6 +942,18 @@ export const BOOK_IDS_SEPARATOR = '+';
 
 export const DOWNLOAD_READEST_URL = 'https://readest.com?utm_source=readest_web';
 
+// Custom URL scheme of the app (deep links, OAuth callbacks). Overridable per
+// build via NEXT_PUBLIC_APP_URL_SCHEME so a rebranded fork can coexist with
+// the official app; must match tauri.conf.json > deep-link and the Android manifest.
+export const APP_URL_SCHEME = process.env['NEXT_PUBLIC_APP_URL_SCHEME'] || 'readest';
+export const APP_URL_PROTOCOL = `${APP_URL_SCHEME}:`;
+// Native widgets/TTS still emit readest:// (scoped to our own package), so the
+// legacy scheme stays accepted alongside a rebranded one.
+export const isAppUrlProtocol = (protocol: string): boolean => {
+  const p = protocol.toLowerCase();
+  return p === APP_URL_PROTOCOL || p === 'readest:';
+};
+
 export const READEST_WEB_BASE_URL = 'https://web.readest.com';
 export const READEST_NODE_BASE_URL = 'https://node.readest.com';
 

@@ -7,6 +7,7 @@ import { IoArrowBack } from 'react-icons/io5';
 
 import { useAuth } from '@/context/AuthContext';
 import { supabase } from '@/utils/supabase';
+import { APP_URL_SCHEME } from '@/services/constants';
 import { useEnv } from '@/context/EnvContext';
 import { useTheme } from '@/hooks/useTheme';
 import { useThemeStore } from '@/store/themeStore';
@@ -34,7 +35,7 @@ interface SingleInstancePayload {
 }
 
 const WEB_AUTH_CALLBACK = `${getBaseUrl()}/auth/callback`;
-const DEEPLINK_CALLBACK = 'readest://auth-callback';
+const DEEPLINK_CALLBACK = `${APP_URL_SCHEME}://auth-callback`;
 const USE_APPLE_SIGN_IN = process.env['NEXT_PUBLIC_USE_APPLE_SIGN_IN'] === 'true';
 
 export default function AuthPage() {

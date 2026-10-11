@@ -105,7 +105,7 @@ describe('Android Auto declarations (#3919)', () => {
   it('keeps audiobook identity for cold-start player routing', () => {
     expect(mediaPlaybackService).toContain('isAudiobook = item.optBoolean("isAudiobook", false)');
     expect(mediaPlaybackService).toContain('selectedBook?.isAudiobook == true');
-    expect(mediaPlaybackService).toContain('"readest://book/$hash?autoplay=tts"');
+    expect(mediaPlaybackService).toContain('"$scheme://book/$hash?autoplay=tts"');
   });
 
   it('starts cold EPUB speech inside the media service without requiring the phone activity', () => {

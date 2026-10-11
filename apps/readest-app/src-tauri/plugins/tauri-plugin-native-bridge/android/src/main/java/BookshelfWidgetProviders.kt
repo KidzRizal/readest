@@ -74,7 +74,7 @@ private val gridTitleIds = arrayOf(
 
 // internal, not private: shared with ReadingWidgetProviders.kt.
 internal fun bookPendingIntent(context: Context, hash: String, requestCode: Int): PendingIntent {
-    val intent = Intent(Intent.ACTION_VIEW, Uri.parse("readest://book/$hash"))
+    val intent = Intent(Intent.ACTION_VIEW, Uri.parse("${context.getString(R.string.app_url_scheme)}://book/$hash"))
         .setPackage(context.packageName)
     val flags = PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
     return PendingIntent.getActivity(context, requestCode, intent, flags)
@@ -108,7 +108,7 @@ private fun groupPendingIntent(
 ): PendingIntent {
     val intent = Intent(
         Intent.ACTION_VIEW,
-        Uri.parse("readest://widget-group/$groupBy/${Uri.encode(groupId)}")
+        Uri.parse("${context.getString(R.string.app_url_scheme)}://widget-group/$groupBy/${Uri.encode(groupId)}")
     ).setPackage(context.packageName)
     val flags = PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
     return PendingIntent.getActivity(context, requestCode, intent, flags)

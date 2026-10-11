@@ -6,6 +6,7 @@ import type { Book } from '@/types/book';
 import { useAppLockStore } from '@/store/appLockStore';
 import { useLibraryStore } from '@/store/libraryStore';
 import { getInitializedAppService, isTauriAppPlatform } from '@/services/environment';
+import { APP_URL_SCHEME } from '@/services/constants';
 import { getOSPlatform } from '@/utils/misc';
 import { isAudiobook } from '@/utils/audiobook';
 import { eventDispatcher } from '@/utils/event';
@@ -227,7 +228,7 @@ const CarMediaLibraryBridge = () => {
         const book = useLibraryStore.getState().getBookByHash(bookHash);
         const autoplay = !book || !isAudiobook(book);
         const query = autoplay ? '?autoplay=tts' : '';
-        const url = `readest://book/${encodeURIComponent(bookHash)}${query}`;
+        const url = `${APP_URL_SCHEME}://book/${encodeURIComponent(bookHash)}${query}`;
         eventDispatcher.dispatch('app-incoming-url', { urls: [url] });
       },
     )

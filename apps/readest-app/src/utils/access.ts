@@ -14,14 +14,28 @@ interface Token {
   [key: string]: string | number | boolean;
 }
 
+/**
+ * Build-time plan override for personal/self-hosted builds whose auth server
+ * mints no `plan` claim. When NEXT_PUBLIC_FORCED_PLAN (or FORCED_PLAN on the
+ * server) names a plan, every token is read as that plan, so the account is
+ * never treated as `free` (no upgrade redirect, full quotas/features).
+ */
+const FORCED_PLANS: readonly UserPlan[] = ['free', 'plus', 'pro', 'purchase'];
+export const getForcedPlan = (): UserPlan | null => {
+  const raw = process.env['FORCED_PLAN'] || process.env['NEXT_PUBLIC_FORCED_PLAN'];
+  return raw && (FORCED_PLANS as readonly string[]).includes(raw) ? (raw as UserPlan) : null;
+};
+
+const readPlan = (data: Partial<Token>): UserPlan => getForcedPlan() ?? data['plan'] ?? 'free';
+
 export const getSubscriptionPlan = (token: string): UserPlan => {
   const data = jwtDecode<Token>(token) || {};
-  return data['plan'] || 'free';
+  return readPlan(data);
 };
 
 export const getUserProfilePlan = (token: string): UserPlan => {
   const data = jwtDecode<Token>(token) || {};
-  let plan = data['plan'] || 'free';
+  let plan = readPlan(data);
   if (plan === 'free') {
     const purchasedQuota = data['storage_purchased_bytes'] || 0;
     if (purchasedQuota > 0) {
@@ -198,7 +212,7 @@ export const STORAGE_QUOTA_GRACE_BYTES = 10 * 1024 * 1024; // 10 MB grace
 
 export const getStoragePlanData = (token: string) => {
   const data = jwtDecode<Token>(token) || {};
-  const plan = data['plan'] || 'free';
+  const plan = readPlan(data);
   const usage = data['storage_usage_bytes'] || 0;
   const purchasedQuota = data['storage_purchased_bytes'] || 0;
   const runtimeConfig = getRuntimeConfig();
@@ -225,7 +239,7 @@ export const getTranslationQuota = (plan: UserPlan): number => {
 
 export const getTranslationPlanData = (token: string) => {
   const data = jwtDecode<Token>(token) || {};
-  const plan: UserPlan = data['plan'] || 'free';
+  const plan: UserPlan = readPlan(data);
   const usage = getDailyUsage() || 0;
   const quota = getTranslationQuota(plan);
 
@@ -238,7 +252,7 @@ export const getTranslationPlanData = (token: string) => {
 
 export const getDailyTranslationPlanData = (token: string) => {
   const data = jwtDecode<Token>(token) || {};
-  const plan = data['plan'] || 'free';
+  const plan = readPlan(data);
   const quota = getTranslationQuota(plan);
 
   return {

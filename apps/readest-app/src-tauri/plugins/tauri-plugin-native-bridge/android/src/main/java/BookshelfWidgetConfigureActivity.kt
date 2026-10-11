@@ -150,7 +150,7 @@ class BookshelfWidgetConfigureActivity : Activity() {
             startActivity(
                 Intent(
                     Intent.ACTION_VIEW,
-                    Uri.parse("readest://widget-edit-shelf/${Uri.encode(selectedShelfId)}"),
+                    Uri.parse("${getString(R.string.app_url_scheme)}://widget-edit-shelf/${Uri.encode(selectedShelfId)}"),
                 ).setPackage(packageName),
             )
             save(appWidgetId, currentSettings())

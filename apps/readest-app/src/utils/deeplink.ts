@@ -1,4 +1,4 @@
-import { READEST_WEB_BASE_URL } from '@/services/constants';
+import { APP_URL_SCHEME, isAppUrlProtocol, READEST_WEB_BASE_URL } from '@/services/constants';
 
 export type AnnotationDeepLink = {
   bookHash: string;
@@ -33,7 +33,7 @@ const parseReadestUrl = (
 
   let segments: string[];
 
-  if (parsed.protocol === 'readest:') {
+  if (isAppUrlProtocol(parsed.protocol)) {
     // readest:// URLs park their first path segment in `host`, not pathname.
     segments = [parsed.host, ...parsed.pathname.split('/')].filter(Boolean);
   } else if (
@@ -69,7 +69,7 @@ export const buildAnnotationWebUrl = ({ bookHash, noteId, cfi }: AnnotationDeepL
  * and direct deeplink scenarios. Markdown export uses the HTTPS form.
  */
 export const buildAnnotationAppUrl = ({ bookHash, noteId, cfi }: AnnotationDeepLink): string => {
-  const base = `readest://book/${bookHash}/annotation/${noteId}`;
+  const base = `${APP_URL_SCHEME}://book/${bookHash}/annotation/${noteId}`;
   return cfi ? `${base}?cfi=${encodeURIComponent(cfi)}` : base;
 };
 
@@ -145,7 +145,7 @@ export const parseDeviceLinkDeepLink = (url: string): { code: string } | null =>
     return null;
   }
   const path = parsed.pathname.replace(/\/+$/, '');
-  const isAppLink = parsed.protocol === 'readest:' && parsed.host === 'link' && path === '';
+  const isAppLink = isAppUrlProtocol(parsed.protocol) && parsed.host === 'link' && path === '';
   const isWebLink =
     (parsed.protocol === 'https:' || parsed.protocol === 'http:') &&
     parsed.host === 'web.readest.com' &&

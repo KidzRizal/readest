@@ -4,6 +4,7 @@ import { getAllWindows, getCurrentWindow } from '@tauri-apps/api/window';
 import { useEnv } from '@/context/EnvContext';
 import { useLibraryStore } from '@/store/libraryStore';
 import { isTauriAppPlatform } from '@/services/environment';
+import { isAppUrlProtocol } from '@/services/constants';
 import { navigateToLibrary, navigateToReader, showLibraryWindow } from '@/utils/nav';
 import { eventDispatcher } from '@/utils/event';
 import { partialMD5 } from '@/utils/md5';
@@ -64,7 +65,8 @@ export function useOpenWithBooks() {
         if (url.startsWith('file://')) {
           url = appService?.isIOSApp ? decodeURI(url) : decodeURI(url.replace('file://', ''));
         }
-        if (!/^(https?:|data:|blob:|readest:)/i.test(url)) {
+        const scheme = url.match(/^[a-z][a-z0-9+.-]*:/i)?.[0] ?? '';
+        if (!/^(https?:|data:|blob:)$/i.test(scheme) && !isAppUrlProtocol(scheme)) {
           filePaths.push(url);
         }
       }

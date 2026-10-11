@@ -1070,10 +1070,11 @@ class MediaPlaybackService : MediaBrowserServiceCompat() {
             // Cold process fallback: the generic book deep link routes an
             // audiobook to the player after library hydration. Only ebooks
             // carry the autoplay flag consumed by the reader's TTS bridge.
+            val scheme = getString(R.string.app_url_scheme)
             val deepLink = if (selectedBook?.isAudiobook == true) {
-                "readest://book/$hash"
+                "$scheme://book/$hash"
             } else {
-                "readest://book/$hash?autoplay=tts"
+                "$scheme://book/$hash?autoplay=tts"
             }
             val intent = Intent(Intent.ACTION_VIEW, Uri.parse(deepLink))
                 .setPackage(packageName)

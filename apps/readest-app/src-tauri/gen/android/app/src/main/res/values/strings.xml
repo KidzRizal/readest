@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Mengread</string>
+    <string name="main_activity_title">Mengread</string>
+    <string name="app_url_scheme" translatable="false">mengread</string>
+</resources>

@@ -13,4 +13,7 @@
         <item quantity="other">%d books</item>
     </plurals>
     <string name="readest_auto_selection_failed">Couldn\'t open this book</string>
+    <!-- Custom URL scheme for in-app deep links; the app module overrides it
+         when rebranded (must match the manifest intent-filter). -->
+    <string name="app_url_scheme" translatable="false">readest</string>
 </resources>

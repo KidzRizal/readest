@@ -10,6 +10,7 @@ import { useOpenDeviceLink } from '@/hooks/useOpenDeviceLink';
 import { useTheme } from '@/hooks/useTheme';
 import { useTranslation } from '@/hooks/useTranslation';
 import { getAPIBaseUrl, isTauriAppPlatform } from '@/services/environment';
+import { APP_URL_SCHEME } from '@/services/constants';
 import { useThemeStore } from '@/store/themeStore';
 import { fetchWithAuth } from '@/utils/fetch';
 import { navigateToLibrary, navigateToLogin } from '@/utils/nav';
@@ -93,7 +94,7 @@ export default function LinkDevice() {
               Link), so offer the app, which usually is signed in. */}
             {!inApp && (
               <a
-                href={`readest://link?code=${encodeURIComponent(code)}`}
+                href={`${APP_URL_SCHEME}://link?code=${encodeURIComponent(code)}`}
                 className='btn btn-contrast'
               >
                 <IoOpenOutline className='h-5 w-5' aria-hidden='true' />

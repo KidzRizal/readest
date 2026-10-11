@@ -29,4 +29,7 @@
     <string name="widget_show_page_count">Page Number</string>
     <string name="widget_show_pages_remaining">Remaining Pages</string>
     <string name="widget_text_size">Font Size</string>
+    <!-- Custom URL scheme for in-app deep links; the app module overrides it
+         when rebranded (must match the manifest intent-filter). -->
+    <string name="app_url_scheme" translatable="false">readest</string>
 </resources>
