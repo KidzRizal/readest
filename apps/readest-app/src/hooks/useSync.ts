@@ -12,6 +12,7 @@ import { transformBookFromDB } from '@/utils/transform';
 import { DBBook, DBBookConfig, DBBookNote } from '@/types/records';
 import { Book, BookConfig, BookDataRecord, BookNote } from '@/types/book';
 import { navigateToLogin } from '@/utils/nav';
+import { getAccessToken } from '@/utils/access';
 import { useReaderStore } from '@/store/readerStore';
 
 const transformsFromDB = {
@@ -235,12 +236,19 @@ export function useSync(bookKey?: string) {
     } catch (err: unknown) {
       console.error(err);
       if (err instanceof Error) {
-        // Read live store settings, not the stale hook closure (see below).
-        const latest = useSettingsStore.getState().settings;
-        if (err.message.includes('Not authenticated') && latest.keepLogin) {
-          latest.keepLogin = false;
-          setSettings(latest);
-          navigateToLogin(router);
+        if (err.message.includes('Not authenticated')) {
+          // Only a missing local session means the user is signed out. A sync
+          // server that rejects a still-valid token (e.g. an API host backed by
+          // a different auth project) must not clear keepLogin and bounce the
+          // user to /auth on every launch.
+          const hasSession = !!(await getAccessToken().catch(() => null));
+          // Read live store settings, not the stale hook closure (see below).
+          const latest = useSettingsStore.getState().settings;
+          if (!hasSession && latest.keepLogin) {
+            latest.keepLogin = false;
+            setSettings(latest);
+            navigateToLogin(router);
+          }
         }
         setSyncError(err.message || `Error pulling ${type}`);
       } else {
